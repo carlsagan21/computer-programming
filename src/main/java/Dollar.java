@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Dollar {
 
-  private static final char DOLLARSIGN = '$';
+  private static final char DOLLAR_SIGN = '$';
   private static final char AT = '@';
   private static final char SPACE = ' ';
 
@@ -31,17 +31,17 @@ public class Dollar {
     if (isHollow) {
       printChars(SPACE, halfSpaceSize);
       if (count == 1) {
-        printChars(DOLLARSIGN, 1);
+        printChars(DOLLAR_SIGN, 1);
         println();
       } else {
-        printChars(DOLLARSIGN, 1);
+        printChars(DOLLAR_SIGN, 1);
         printChars(SPACE, count - 2);
-        printChars(DOLLARSIGN, 1);
+        printChars(DOLLAR_SIGN, 1);
         println();
       }
     } else {
       printChars(SPACE, halfSpaceSize);
-      printChars(DOLLARSIGN, count);
+      printChars(DOLLAR_SIGN, count);
       println();
     }
   }
@@ -120,9 +120,9 @@ public class Dollar {
           int halfSpaceSize = (maxLength - currCount) / 2;
           printChars(SPACE, halfSpaceSize - 1);
           printChars(AT, 1);
-          printChars(DOLLARSIGN, 1);
+          printChars(DOLLAR_SIGN, 1);
           printChars(SPACE, currCount - 2);
-          printChars(DOLLARSIGN, 1);
+          printChars(DOLLAR_SIGN, 1);
           printChars(AT, 1);
           println();
         } else {
@@ -135,14 +135,14 @@ public class Dollar {
           printChars(SPACE, halfSpaceSize - 1);
           if (currCount == 1) {
             printChars(AT, 1);
-            printChars(DOLLARSIGN, 1);
+            printChars(DOLLAR_SIGN, 1);
             printChars(AT, 1);
             println();
           } else {
             printChars(AT, 1);
-            printChars(DOLLARSIGN, 1);
+            printChars(DOLLAR_SIGN, 1);
             printChars(SPACE, currCount - 2);
-            printChars(DOLLARSIGN, 1);
+            printChars(DOLLAR_SIGN, 1);
             printChars(AT, 1);
             println();
           }
