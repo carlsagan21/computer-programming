@@ -5,9 +5,9 @@ public class Tennis {
 
   private static final int MALE_SET_COUNT = 3;
   private static final int FEMALE_SET_COUNT = 2;
-  private static final int GAME_COUNT = 2;
-  private static final int POINT_COUNT = 2;
-  private static final int TIE_BREAK_COUNT = 3;
+  private static final int GAME_COUNT = 6;
+  private static final int POINT_COUNT = 4;
+  private static final int TIE_BREAK_COUNT = 7;
 
   private static int pointL = 0;
   private static int pointR = 0;
@@ -76,6 +76,10 @@ public class Tennis {
     return setL + setR;
   }
 
+  private static boolean isFirstSet() {
+    return setL == 0 && setR == 0;
+  }
+
   private static void resetPointState() {
     pointL = 0;
     pointR = 0;
@@ -110,6 +114,8 @@ public class Tennis {
     print("Type the gender (F: Female/M: Male): ");
     boolean isGenderFemale = isFemale(sc.next());
 
+    int SET_COUNT = isGenderFemale ? FEMALE_SET_COUNT : MALE_SET_COUNT;
+
     if (isMatchAustralian) {
       print("Australian");
     } else {
@@ -143,13 +149,17 @@ public class Tennis {
           print(gameRTBPoints[i]);
           print(")");
         }
-//        if there is no new point, remove space
-        if (gameL != 0 || gameR != 0 || pointL != 0 || pointR != 0) {
+
+        if (i != getSets() - 1) {
           print(" ");
         }
       }
 //      if first or there is point, print current game
-      if ((setL == 0 && setR == 0) || (gameL != 0 || gameR != 0 || pointL != 0 || pointR != 0)) {
+      if (isFirstSet() || (gameL != 0 || gameR != 0 || pointL != 0 || pointR != 0)) {
+//        if there is no new point, remove space
+        if (!isFirstSet()) {
+          print(" ");
+        }
         print(gameL);
         print("-");
         print(gameR);
@@ -191,9 +201,9 @@ public class Tennis {
 //      set point state and count up game.
       gameWinner = 0;
       if (isTieBreak) {
-        if (pointL >= TIE_BREAK_COUNT && pointL == pointR + 2) {
+        if (pointL >= TIE_BREAK_COUNT && pointL >= pointR + 2) {
           gameWinner--;
-        } else if (pointR >= TIE_BREAK_COUNT && pointL + 2 == pointR) {
+        } else if (pointR >= TIE_BREAK_COUNT && pointL + 2 <= pointR) {
           gameWinner++;
         }
       } else {
@@ -223,29 +233,38 @@ public class Tennis {
 
 //      set game state and count up set.
       setWinner = 0;
-      if (gameL == GAME_COUNT && gameR == GAME_COUNT
-          || gameL == GAME_COUNT + 1 && gameR == GAME_COUNT
-          || gameL == GAME_COUNT && gameR == GAME_COUNT + 1) {
-//        tie break
-        isTieBreak = true;
-        if (gameL == GAME_COUNT + 1) {
+      if (isMatchAustralian && getSets() == SET_COUNT * 2 - 2) {
+//        Advantage set
+        if (gameL >= GAME_COUNT && gameL >= gameR + 2) {
           setWinner--;
-        } else if (gameR == GAME_COUNT + 1) {
-          setWinner++;
-        }
-      } else if (gameL >= GAME_COUNT - 1 && gameR >= GAME_COUNT - 1) {
-//        game deuce. if isTieBreak true, don't get in here.
-        if (gameL == GAME_COUNT + 1) {
-          setWinner--;
-        } else if (gameR == GAME_COUNT + 1) {
+        } else if (gameR >= GAME_COUNT && gameL + 2 <= gameR) {
           setWinner++;
         }
       } else {
+        if (gameL == GAME_COUNT && gameR == GAME_COUNT
+            || gameL == GAME_COUNT + 1 && gameR == GAME_COUNT
+            || gameL == GAME_COUNT && gameR == GAME_COUNT + 1) {
+//        tie break
+          isTieBreak = true;
+          if (gameL == GAME_COUNT + 1) {
+            setWinner--;
+          } else if (gameR == GAME_COUNT + 1) {
+            setWinner++;
+          }
+        } else if (gameL >= GAME_COUNT - 1 && gameR >= GAME_COUNT - 1) {
+//        game deuce. if isTieBreak true, don't get in here.
+          if (gameL == GAME_COUNT + 1) {
+            setWinner--;
+          } else if (gameR == GAME_COUNT + 1) {
+            setWinner++;
+          }
+        } else {
 //        not game deuce
-        if (gameL == GAME_COUNT && gameR <= GAME_COUNT - 2) {
-          setWinner--;
-        } else if (gameL <= GAME_COUNT - 2 && gameR == GAME_COUNT) {
-          setWinner++;
+          if (gameL == GAME_COUNT && gameR <= GAME_COUNT - 2) {
+            setWinner--;
+          } else if (gameR == GAME_COUNT && gameL <= GAME_COUNT - 2) {
+            setWinner++;
+          }
         }
       }
 
@@ -265,16 +284,9 @@ public class Tennis {
       }
 
 //      end condition according to set
-      if (isGenderFemale) {
-        if (setL == FEMALE_SET_COUNT || setR == FEMALE_SET_COUNT) {
-          println("Game finished!");
-          return;
-        }
-      } else {
-        if (setL == MALE_SET_COUNT || setR == MALE_SET_COUNT) {
-          println("Game finished!");
-          return;
-        }
+      if (setL == SET_COUNT || setR == SET_COUNT) {
+        println("Game finished!");
+        return;
       }
     }
   }
