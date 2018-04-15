@@ -1,3 +1,5 @@
+package assign1;
+
 import java.security.InvalidParameterException;
 import java.util.Scanner;
 
